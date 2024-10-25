@@ -36,7 +36,7 @@ Use this way if you don't want to install via composer:
 
 - Download [the latest version here](https://github.com/magezon2018/module-core/archive/refs/heads/main.zip) 
 - Extract `main.zip` file to `app/code/Magezon/Core`. You should create a folder path `app/code/Magezon/Core` if it does not exist.
-- Go to Magento root folder and run upgrade command line to install `Magezon_Core`:
+- Go to Magento root folder and run upgrade command line to install Magezon Core:
 
 ```
 php bin/magento setup:upgrade
