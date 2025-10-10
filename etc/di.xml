@@ -14,7 +14,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-	<preference for="Magezon\Core\framework\SearchCriteria\CollectionProcessorInterface" type="Magezon\Core\framework\SearchCriteria\CollectionProcessor" />
+	<preference for="Magezon\Core\Framework\SearchCriteria\CollectionProcessorInterface" type="Magezon\Core\Framework\SearchCriteria\CollectionProcessor" />
 	<type name="Magento\Framework\Filter\DirectiveProcessor\IfDirective">
 		<plugin name="addIfStatement" type="\Magezon\Core\Plugin\Filter\DirectiveProcessor\IfDirective" />
 	</type>
