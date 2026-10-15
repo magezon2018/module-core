@@ -1,4 +1,4 @@
 <script>
-	window.mgzMediaUrl              = '<?php echo $block->getMediaUrl() ?>';
-	window.mgzFilesBrowserWindowUrl = '<?php echo $block->getFilesBrowserWindowUrl() ?>';
+	window.mgzMediaUrl              = '<?= $block->escapeJs($block->getMediaUrl()) ?>';
+	window.mgzFilesBrowserWindowUrl = '<?= $block->escapeJs($block->getFilesBrowserWindowUrl()) ?>';
 </script>

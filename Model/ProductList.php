@@ -117,7 +117,10 @@ class ProductList
         if ($isShowOutOfStock != 1) {
             $this->stockHelper->addInStockFilterToCollection($collection);
         }
-        $collection->addAttributeToFilter('visibility', $this->catalogProductVisibility->getVisibleInCatalogIds());
+        $visibleIds = $this->catalogProductVisibility->getVisibleInCatalogIds();
+        $collection->addAttributeToFilter('visibility', $visibleIds, 'left')
+            ->getSelect()
+            ->having('visibility IN (?)', $visibleIds);
         $collection = $this->_addProductAttributesAndPrices($collection)->addStoreFilter($store);
         if ($conditions) {
             $conditions = $this->conditionsHelper->decode($conditions);

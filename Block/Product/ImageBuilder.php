@@ -182,7 +182,7 @@ class ImageBuilder
      *
      * @return \Magento\Catalog\Block\Product\Image
      */
-    public function create(Product $product = null, $imageId = null, array $attributes = null)
+    public function create(?Product $product = null, $imageId = null, ?array $attributes = null)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $attrs = [];

@@ -5,18 +5,19 @@
 $blockGrid        = $block->getBlockGrid();
 $gridJsObjectName = $blockGrid->getJsObjectName();
 $id               = 'in_items' . time() . uniqid();
+$ajaxParam        = $block->getAjaxParam() ? $block->getAjaxParam() : 'selected_products';
 ?>
 <?= $block->getGridHtml() ?>
 <?php if ($block->getElementName() && $block->getFormPart()): ?>
-<input type="hidden" name="<?php echo $block->getElementName(); ?>" id="<?php echo $id ?>" data-form-part="<?php echo $block->getFormPart() ?>" value="" />
+<input type="hidden" name="<?= $block->escapeHtmlAttr($block->getElementName()) ?>" id="<?= $block->escapeHtmlAttr($id) ?>" data-form-part="<?= $block->escapeHtmlAttr($block->getFormPart()) ?>" value="" />
 <script type="text/x-magento-init">
     {
         "*": {
         "Magezon_Core/js/form/assign-items": {
                 "selectedItems": <?= /* @escapeNotVerified */ $block->getJson() ?>,
                 "gridJsObjectName": <?= /* @escapeNotVerified */ '"' . $gridJsObjectName . '"' ?: '{}' ?>,
-                "selector": "<?php echo $id ?>",
-                "ajaxParam": "<?php echo $block->getAjaxParam() ? $block->getAjaxParam() : 'selected_products' ?>"
+                "selector": "<?= $block->escapeJs($id) ?>",
+                "ajaxParam": "<?= $block->escapeJs($ajaxParam) ?>"
             }
         }
     }

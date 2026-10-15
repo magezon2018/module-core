@@ -15,6 +15,7 @@
 namespace Magezon\Core\Helper;
 
 use \Magento\Framework\App\ObjectManager;
+use Magento\Framework\Module\Manager;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -48,6 +49,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $serializer;
 
+    protected $moduleManager;
+
     /**
      * @param \Magento\Framework\App\Helper\Context             $context
      * @param \Magento\Store\Model\StoreManagerInterface        $storeManager
@@ -62,6 +65,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
         \Magento\Framework\Registry $registry,
         \Magento\Cms\Model\Page $cmsPage,
+        Manager $moduleManager,
         \Magezon\Core\Framework\Serialize\Serializer\Json $serializer
     ) {
         parent::__construct($context);
@@ -69,6 +73,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->filterProvider = $filterProvider;
         $this->registry       = $registry;
         $this->cmsPage        = $cmsPage;
+        $this->moduleManager  = $moduleManager;
         $this->serializer     = $serializer;
     }
    
@@ -452,5 +457,69 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $html = str_replace($matches[0], [], $html);
         }
         return $html;
+    }
+
+    public function isModuleActive(string $moduleName): bool
+    {
+        return $this->moduleManager->isEnabled($moduleName);
+    }
+
+    /**
+     * Guess the original types back out of a form-data body.
+     *
+     * @deprecated 2026-08-25 No first-party caller remains. `formDataMiddleware`
+     * became opt-in in ReactAPP `eb86e3af80`, so every write that does not carry
+     * a file arrives as JSON with its types intact — and re-guessing intact
+     * values CORRUPTS them: the coercion below has a string branch and no
+     * `else`, so a real `true` or `10` falls through every branch and comes back
+     * null. `Users\Me\Update` was the last caller and now stores its payload
+     * verbatim.
+     *
+     * Kept, not deleted: this is a public method on a Helper that ships to
+     * customers, so removing it is a breaking change that belongs to its own
+     * release rather than riding along with a fix. Read the request body
+     * directly instead.
+     *
+     * @param mixed $fd
+     */
+    public function parseFormData($fd): array
+    {
+        // `mixed` in, `array` out — so a non-array argument could only ever fatal
+        // inside array_is_list(). Nothing useful is lost by saying "no fields".
+        if (!is_array($fd)) {
+            return [];
+        }
+
+        $isArrayList = array_is_list($fd);
+        $result = [];
+
+        foreach ($fd as $key => $val) {
+            $value = null;
+
+            if (is_array($val)) {
+                $value = $this->parseFormData($val);
+            } elseif (is_string($val)) {
+                $value = trim($val);
+
+                // Simple type coercion
+                if ($value === 'true' || $value === 'false') {
+                    $value = $value === 'true';
+                } elseif ($value !== '' && is_numeric($value)) {
+                    $value = str_contains($value, '.')
+                        ? (float) $value
+                        : (int) $value;
+                }
+            } else {
+                $value = $val;
+            }
+
+            if ($isArrayList) {
+                $result[] = $value;
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 }

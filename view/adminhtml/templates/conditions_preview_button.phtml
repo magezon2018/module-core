@@ -49,12 +49,12 @@ $formName = $this->getFormName();
                 return result;
             }
             $('#mgz_conditions_preview_btn').click(function () {
-                var data = uiRegistry.get('<?= $formName ?>.<?= $formName ?>_data_source').get('data');
-                var additionalFields = $('[data-form-part=<?= $formName ?>]');
+                var data = uiRegistry.get('<?= $block->escapeJs($formName) ?>.<?= $block->escapeJs($formName) ?>_data_source').get('data');
+                var additionalFields = $('[data-form-part=<?= $block->escapeJs($formName) ?>]');
                 var additional = collectData(additionalFields);
                 var post = {...data, ...additional};
-                post['mgz_conditions_grid_id'] = '<?= $this->getRequest()->getParam('mgz_conditions_grid_id') ?>';
-                var url = "<?= $this->getUrl('mgzcore/conditions/productlist') ?>";
+                post['mgz_conditions_grid_id'] = '<?= $block->escapeJs($block->getRequest()->getParam('mgz_conditions_grid_id')) ?>';
+                var url = "<?= $block->escapeUrl($block->getUrl('mgzcore/conditions/productlist')) ?>";
                 $.ajax({
                     type: "POST",
                     dataType: "html",

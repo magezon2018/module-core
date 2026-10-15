@@ -15,6 +15,8 @@
 namespace Magezon\Core\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Psr\Log\LoggerInterface;
 
 class File extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -27,6 +29,10 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $_httpRequest;
+    
+    protected $readFactory;
+
+    protected $logger;
 
     /**
      * @param \Magento\Framework\App\Helper\Context     $context       
@@ -34,11 +40,15 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        ReadFactory $readFactory,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->_objectManager = $objectManager;
         $this->_httpRequest   = $context->getRequest();
+        $this->readFactory    = $readFactory;
+        $this->logger    = $logger;
     }
 
     public function uploadImage($type, $data, $mediaFolder, $allowedExtensions = '', $maximumSize = 0)
@@ -79,5 +89,35 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
             $data[$type] = $data[$type]['value'];
         }
         return $data;
+    }
+
+    /**
+     * Read file content using absolute path
+     *
+     * @param string $absolutePath e.g. '/var/www/html/pub/media/button.json'
+     * @return string|null
+     */
+    public function getFileContent(string $absolutePath): ?string
+    {
+        try {
+            // Create Read directory from the parent folder of your file
+            $parentDir = dirname($absolutePath);
+            $fileName  = basename($absolutePath);
+
+            $read = $this->readFactory->create($parentDir);
+
+            if (!$read->isFile($fileName)) {
+                $this->logger->warning("File not found", ['path' => $absolutePath]);
+                return null;
+            }
+
+            return $read->readFile($fileName);
+        } catch (\Exception $e) {
+            $this->logger->error('Cannot read file', [
+                'path'  => $absolutePath,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
     }
 }

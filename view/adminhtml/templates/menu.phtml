@@ -2,8 +2,8 @@
 /**
  * @var $block \Magezon\Core\Block\Adminhtml\TopMenu
  */
-$titleId    = ($block->getTitleId()) ? ' id="' . $block->getTitleId() . '"' : '';
-$titleClass = ($block->getTitleClass()) ? ' ' . $block->getTitleClass() : '';
+$titleId    = ($block->getTitleId()) ? ' id="' . $block->escapeHtmlAttr($block->getTitleId()) . '"' : '';
+$titleClass = ($block->getTitleClass()) ? ' ' . $block->escapeHtmlAttr($block->getTitleClass()) : '';
 $title      = $block->escapeHtml($block->getPageTitle());
 $links      = [];
 if ($block->getLinks()) {
@@ -19,13 +19,13 @@ foreach ($links as $_columnLinks) {
 <?php if ($total) { ?>
 	<div class="mgz-menu admin__action-dropdown-wrap">
 	    <a
-	        href="<?= $block->getUrl('adminhtml/system_account/index') ?>"
+	        href="<?= $block->escapeUrl($block->getUrl('adminhtml/system_account/index')) ?>"
 	        class="admin__action-dropdown"
 	        data-mage-init='{"dropdown":{}}'
 	        data-toggle="dropdown">
 	        <span class="admin__action-dropdown-text">
-	            <span class="page-title-wrapper<?= $titleClass ?>">
-	            	<h1 class="page-title"<?= $titleId ?>><?= $title ?></h1>
+	            <span class="page-title-wrapper<?= /* @noEscape */ $titleClass ?>">
+	            	<h1 class="page-title"<?= /* @noEscape */ $titleId ?>><?= /* @noEscape */ $title ?></h1>
 	            	<?= $block->getChildHtml() ?>
 	            </span>
 	        </span>
@@ -35,18 +35,18 @@ foreach ($links as $_columnLinks) {
 				<?php if (is_array($_link) && isset($_link[0])) { ?>
 					<?php foreach ($_link as $_link1) { ?>
 						<?php if (isset($_link1['class']) || isset($_link1['title']) || isset($_link1['link'])) { ?>
-							<li <?php if (isset($_link1['class'])): ?>class="<?php echo $_link1['class'] ?>"<?php endif; ?>>
+							<li <?php if (isset($_link1['class'])): ?>class="<?= $block->escapeHtmlAttr($_link1['class']) ?>"<?php endif; ?>>
 								<?php if (isset($_link1['link']) && $_link1['title']) { ?>
-									<a <?php if (isset($_link1['target'])): ?>target="<?php echo $_link1['target'] ?>"<?php endif; ?> href="<?php echo $_link1['link'] ?>"><?php echo $_link1['title'] ?></a>
+									<a <?php if (isset($_link1['target'])): ?>target="<?= $block->escapeHtmlAttr($_link1['target']) ?>"<?php endif; ?> href="<?= $block->escapeUrl($_link1['link']) ?>"><?= $block->escapeHtml($_link1['title']) ?></a>
 								<?php } ?>
 							</li>
 						<?php } ?>
 					<?php } ?>
 				<?php } else { ?>
 					<?php if (isset($_link['class']) || isset($_link['title']) || isset($_link['link'])) { ?>
-			        	<li <?php if (isset($_link['class'])): ?>class="<?php echo $_link['class'] ?>"<?php endif; ?>>
+			        	<li <?php if (isset($_link['class'])): ?>class="<?= $block->escapeHtmlAttr($_link['class']) ?>"<?php endif; ?>>
 			        		<?php if (isset($_link['link']) && $_link['title']) { ?>
-			        			<a <?php if (isset($_link['target'])): ?>target="<?php echo $_link['target'] ?>"<?php endif; ?> href="<?php echo $_link['link'] ?>"><?php echo $_link['title'] ?></a>
+			        			<a <?php if (isset($_link['target'])): ?>target="<?= $block->escapeHtmlAttr($_link['target']) ?>"<?php endif; ?> href="<?= $block->escapeUrl($_link['link']) ?>"><?= $block->escapeHtml($_link['title']) ?></a>
 			        		<?php } ?>
 			        	</li>
 		        	<?php } ?>
@@ -55,8 +55,8 @@ foreach ($links as $_columnLinks) {
 	    </ul>
 	</div>
 <?php } else { ?>
-<div class="page-title-wrapper<?= $titleClass ?>">
-    <h1 class="page-title"<?= $titleId ?>><?= $title ?></h1>
+<div class="page-title-wrapper<?= /* @noEscape */ $titleClass ?>">
+    <h1 class="page-title"<?= /* @noEscape */ $titleId ?>><?= /* @noEscape */ $title ?></h1>
     <?= $block->getChildHtml() ?>
 </div>
 <?php } ?>

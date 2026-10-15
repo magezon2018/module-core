@@ -18,5 +18,16 @@
         <route id="mgzcore" frontName="mgzcore">
             <module name="Magezon_Core" before="Magezon_Core" />
         </route>
+        <!-- The batch endpoint the editor's core-data reaches through
+             `__experimentalBatch`. ReactAPP's magentoRouteConverter middleware
+             rewrites the WordPress path `/batch/v1` to `/magezon/batch` (see
+             packages/api-fetch/src/middlewares/magentoRouteConverter.ts), so the
+             frontName has to be `magezon` — NOT `mgzcore`. Without this route the
+             rewrite landed on a frontName no module declared and every batched
+             delete / trash / restore 404'd silently, which is exactly how the
+             File Manager's multi-select actions failed. -->
+        <route id="magezon" frontName="magezon">
+            <module name="Magezon_Core" />
+        </route>
     </router>
 </config>

@@ -17,4 +17,12 @@
 	<type name="Magento\Backend\Block\Menu">
         <plugin name="remove_empty_item" type="Magezon\Core\Plugin\Block\Menu" />
     </type>
+
+    <!--
+        Adminhtml-only on purpose: `_processUrlKeys` is a backend concern, and
+        the storefront never posts JSON into a Magento controller.
+    -->
+    <type name="Magento\Backend\App\AbstractAction">
+        <plugin name="magezon_core_json_request_body" type="Magezon\Core\Plugin\App\JsonRequestBody" sortOrder="10" />
+    </type>
 </config>

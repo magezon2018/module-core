@@ -157,10 +157,13 @@ class Product extends Extended
 
     /**
      * @return Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareCollection()
     {
         $productIds = $this->getProductIds();
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->_productFactory->create()->getCollection();
         $collection->addAttributeToSelect(
             ['name', 'url_key', 'visibility', 'status', 'price', 'small_image', 'created_at']
@@ -180,27 +183,29 @@ class Product extends Extended
         $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
         $sortOrder = $this->getModel()->getSortOrder();
         if ($sortOrder != null) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+            $collection = $this->getCollection();
             switch ($sortOrder) {
                 case '0':
-                    $this->getCollection()->addAttributeToSort('entity_id', 'ASC');
+                    $collection->addAttributeToSort('entity_id', 'ASC');
                     break;
                 case '1':
-                    $this->getCollection()->getSelect()->order('created_at DESC');
+                    $collection->getSelect()->order('created_at DESC');
                     break;
                 case '2':
-                    $this->getCollection()->getSelect()->order(['is_in_stock DESC']);
+                    $collection->getSelect()->order(['is_in_stock DESC']);
                     break;
                 case '3':
-                    $this->getCollection()->addAttributeToSort('name', 'ASC');
+                    $collection->addAttributeToSort('name', 'ASC');
                     break;
                 case '4':
-                    $this->getCollection()->addAttributeToSort('name', 'DESC');
+                    $collection->addAttributeToSort('name', 'DESC');
                     break;
                 case '5':
-                    $this->getCollection()->addAttributeToSort('price', 'ASC');
+                    $collection->addAttributeToSort('price', 'ASC');
                     break;
                 case '6':
-                    $this->getCollection()->addAttributeToSort('price', 'DESC');
+                    $collection->addAttributeToSort('price', 'DESC');
                     break;
             }
         }

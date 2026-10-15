@@ -1,0 +1,4 @@
+/*! Magezon mgz-fa utilities (FA6.7.2) -- requires fontawesome.css (@keyframes fa-spin). */
+.mgz-fa-spin{animation-name:fa-spin;animation-delay:var(--fa-animation-delay,0s);animation-direction:var(--fa-animation-direction,normal);animation-duration:var(--fa-animation-duration,2s);animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-timing-function:var(--fa-animation-timing,linear)}
+.mgz-fa-ul{list-style-type:none;margin-left:var(--fa-li-margin,2.5em);padding-left:0}.mgz-fa-ul>li{position:relative}
+.mgz-fa-li{left:calc(var(--fa-li-width, 2em)*-1);position:absolute;text-align:center;width:var(--fa-li-width,2em);line-height:inherit}

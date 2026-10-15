@@ -1,4 +1,4 @@
-<div id="mgzreport" class="<?= $block->getAdditionalClasses() ?>" data-bind="scope:'mgzreport'">
+<div id="mgzreport" class="<?= $block->escapeHtmlAttr($block->getAdditionalClasses()) ?>" data-bind="scope:'mgzreport'">
     <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">
         {
@@ -8,6 +8,6 @@
         }
     </script>
     <script>
-        window.mgzReportsConfig = <?= $block->getConfig() ?>;
+        window.mgzReportsConfig = <?= /* @noEscape */ $block->getConfig() ?>;
     </script>
 </div>

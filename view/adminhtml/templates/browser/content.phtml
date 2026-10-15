@@ -14,7 +14,7 @@ $buttonsHtml = str_replace('MediabrowserUtility', 'MgzMediabrowserUtility', $blo
         <div class="insert-title" id="content_header">
             <div class="insert-title-inner">
                 <div class="insert-actions">
-                    <?= $buttonsHtml ?>
+                    <?= /* @noEscape */ $buttonsHtml ?>
                 </div>
                 <div class="title"><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></div>
             </div>

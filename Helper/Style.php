@@ -14,21 +14,29 @@
 
 namespace Magezon\Core\Helper;
 
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
+
 class Style extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var Data
+     * @var Data|null
      */
-    protected $dataHelper;
+    protected $dataHelper = null;
 
-	/**
-	 * @param \Magezon\Core\Helper\Data $dataHelper
-	 */
-	public function __construct(
-		\Magezon\Core\Helper\Data $dataHelper
-	) {
-		$this->dataHelper = $dataHelper;
-	}
+    public function __construct(
+        Context $context
+    ) {
+        parent::__construct($context);
+    }
+
+    protected function getDataHelper(): Data
+    {
+        if ($this->dataHelper === null) {
+            $this->dataHelper = ObjectManager::getInstance()->get(Data::class);
+        }
+        return $this->dataHelper;
+    }
 
     /**
      * @param  string|array $target 
@@ -87,7 +95,7 @@ class Style extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getColor($value, $important = false)
     {
-        if ($value && (!$this->dataHelper->startsWith($value, '#') && !$this->dataHelper->startsWith($value, 'rgb'))) {
+        if ($value && (!$this->getDataHelper()->startsWith($value, '#') && !$this->getDataHelper()->startsWith($value, 'rgb'))) {
             if ($value != 'transparent') {
                 $value = '#' . $value;
             }
@@ -245,7 +253,7 @@ class Style extends \Magento\Framework\App\Helper\AbstractHelper
 
 		$styles['background-color'] = $this->getColor($config['background_color']);
 		if ($backgroundImage = $config['background_image']) {
-			$styles['background-image'] = 'url(\'' . $this->dataHelper->getImageUrl($backgroundImage) . '\')';
+			$styles['background-image'] = 'url(\'' . $this->getDataHelper()->getImageUrl($backgroundImage) . '\')';
 
 			$backgroundPosition = $config['background_position'];
 			if ($backgroundPosition == 'custom') {

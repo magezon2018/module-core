@@ -14,8 +14,26 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-	<preference for="Magezon\Core\framework\SearchCriteria\CollectionProcessorInterface" type="Magezon\Core\framework\SearchCriteria\CollectionProcessor" />
+	<preference for="Magezon\Core\Framework\SearchCriteria\CollectionProcessorInterface" type="Magezon\Core\Framework\SearchCriteria\CollectionProcessor" />
+	<!-- A module contributes preference handlers by adding to this type's
+	     readHandlers/writeHandlers arrays — see the Processor docblock for the
+	     shape. Do it from the contributing module's GLOBAL etc/di.xml: the
+	     repository is read by the editor's config providers in adminhtml AND on
+	     the Frontend Editor shell (frontend area), so an etc/adminhtml/di.xml
+	     declaration would silently not merge on the second one. -->
+	<preference for="Magezon\Core\Model\User\Preference\ProcessorInterface" type="Magezon\Core\Model\User\Preference\Processor" />
 	<type name="Magento\Framework\Filter\DirectiveProcessor\IfDirective">
 		<plugin name="addIfStatement" type="\Magezon\Core\Plugin\Filter\DirectiveProcessor\IfDirective" />
+	</type>
+	<!-- Manual half of the media seeding that Setup\Recurring runs on every
+	     setup:upgrade: `bin/magento magezon:media:deploy`, whose force option is
+	     the only way to restore an overwritten asset. Console commands are
+	     collected from the GLOBAL di.xml only. -->
+	<type name="Magento\Framework\Console\CommandList">
+		<arguments>
+			<argument name="commands" xsi:type="array">
+				<item name="magezon_media_deploy" xsi:type="object">Magezon\Core\Console\Command\MediaDeployCommand</item>
+			</argument>
+		</arguments>
 	</type>
 </config>
