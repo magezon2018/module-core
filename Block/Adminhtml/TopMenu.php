@@ -84,11 +84,11 @@ class TopMenu extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return void
+     * @return array|null
      */
     public function intLinks()
     {
-        return;
+        return null;
     }
 
     /**

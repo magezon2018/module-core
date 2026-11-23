@@ -207,10 +207,12 @@ class Conditions extends Generic implements TabInterface
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
-        $renderer = $this->getLayout()->createBlock(Fieldset::class);
-        $renderer->setTemplate(
-            'Magento_CatalogRule::promo/fieldset.phtml'
-        )->setNewChildUrl(
+        $renderer = $this->getLayout()->createBlock(
+            Fieldset::class,
+            '',
+            ['data' => ['template' => 'Magento_CatalogRule::promo/fieldset.phtml']]
+        );
+        $renderer->setNewChildUrl(
             $newChildUrl
         )->setFieldSetId(
             $conditionsFieldSetId

@@ -26,6 +26,11 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     protected $_storeId;
 
     /**
+     * @var array
+     */
+    protected $_productLimitationFilters = [];
+
+    /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface

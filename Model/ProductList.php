@@ -14,6 +14,8 @@
 
 namespace Magezon\Core\Model;
 
+use Magento\Reports\Model\ResourceModel\Event\Type\CollectionFactory as EventTypeCollectionFactory;
+
 class ProductList
 {
     /**
@@ -52,9 +54,9 @@ class ProductList
     protected $_resource;
 
     /**
-     * @var \Magento\Reports\Model\Event\TypeFactory
+     * @var EventTypeCollectionFactory
      */
-    protected $_eventTypeFactory;
+    protected $_eventTypeCollectionFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
@@ -79,7 +81,7 @@ class ProductList
      * @param \Magento\CatalogWidget\Model\Rule                              $rule
      * @param \Magento\Rule\Model\Condition\Sql\Builder                      $sqlBuilder
      * @param \Magento\Framework\App\ResourceConnection                      $resource
-     * @param \Magento\Reports\Model\Event\TypeFactory                       $eventTypeFactory
+     * @param EventTypeCollectionFactory                       $eventTypeCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface           $localeDate
      * @param \Magento\Widget\Helper\Conditions                              $conditionsHelper
      * @param \Magento\CatalogInventory\Helper\Stock                         $stockHelper
@@ -92,7 +94,7 @@ class ProductList
         \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
+        EventTypeCollectionFactory $eventTypeCollectionFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Widget\Helper\Conditions $conditionsHelper,
         \Magento\CatalogInventory\Helper\Stock $stockHelper
@@ -104,7 +106,7 @@ class ProductList
         $this->rule                     = $rule;
         $this->sqlBuilder               = $sqlBuilder;
         $this->_resource                = $resource;
-        $this->_eventTypeFactory        = $eventTypeFactory;
+        $this->_eventTypeCollectionFactory        = $eventTypeCollectionFactory;
         $this->_localeDate              = $localeDate;
         $this->conditionsHelper         = $conditionsHelper;
         $this->stockHelper              = $stockHelper;
@@ -343,7 +345,8 @@ class ProductList
 
     protected function _getMostViewedProductCollection($collection, $storeId)
     {
-        $eventTypes = $this->_eventTypeFactory->create()->getCollection();
+        $eventTypes = $this->_eventTypeCollectionFactory->create();
+        $productViewEvent = 0;
         foreach ($eventTypes as $eventType) {
             if ($eventType->getEventName() == 'catalog_product_view') {
                 $productViewEvent = (int)$eventType->getId();

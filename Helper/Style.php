@@ -212,25 +212,24 @@ class Style extends \Magento\Framework\App\Helper\AbstractHelper
 				unset($styles['border-top-style']);
 				unset($styles['border-right-style']);
 				unset($styles['border-bottom-style']);
-				unset($styles['border-left-style']);
+				if (isset($styles['border-left-style'])) {
+					unset($styles['border-left-style']);
+				}
 				$styles['border-style'] = $borderStyle;
 
 				if ($borderTopWidth == $borderRightWidth && $borderTopWidth == $borderBottomWidth && $borderTopWidth == $borderLeftWidth) {
 					$styles['border'] = $borderTopWidth . ' ' . $borderStyle . ' ' . $borderColor;
 					unset($styles['border-top-width']);
-					unset($styles['border-top-style']);
 					unset($styles['border-right-width']);
-					unset($styles['border-right-style']);
 					unset($styles['border-bottom-width']);
-					unset($styles['border-bottom-style']);
-					unset($styles['border-left-width']);
-					unset($styles['border-left-style']);
+					if (isset($styles['border-left-width'])) {
+						unset($styles['border-left-width']);
+					}
 					unset($styles['border-color']);
 				}
 			}
 
 			if ($this->isNull($borderTopWidth) && $this->isNull($borderRightWidth) && $this->isNull($borderBottomWidth) && $this->isNull($borderLeftWidth)) {
-				unset($styles['border-style']);
 				unset($styles['border-color']);
 			}
 		}

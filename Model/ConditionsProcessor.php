@@ -17,6 +17,7 @@ namespace Magezon\Core\Model;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\DB\Select;
+use Magento\Reports\Model\ResourceModel\Event\Type\CollectionFactory as EventTypeCollectionFactory;
 use Magento\Store\Model\ScopeInterface;
 use Zend_Db_Expr;
 
@@ -63,9 +64,9 @@ class ConditionsProcessor
     protected $_localeDate;
 
     /**
-     * @var \Magento\Reports\Model\Event\TypeFactory
+     * @var EventTypeCollectionFactory
      */
-    protected $_eventTypeFactory;
+    protected $_eventTypeCollectionFactory;
 
     /**
      * @var \Magento\Store\Model\System\Store
@@ -90,9 +91,8 @@ class ConditionsProcessor
      * @param \Magento\CatalogWidget\Model\Rule $rule
      * @param \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
+     * @param EventTypeCollectionFactory $eventTypeCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Catalog\Model\ResourceModel\Product $product
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
@@ -104,9 +104,8 @@ class ConditionsProcessor
         \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
+        EventTypeCollectionFactory $eventTypeCollectionFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Catalog\Model\ResourceModel\Product $product,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\App\Emulation $appEmulation
@@ -119,7 +118,7 @@ class ConditionsProcessor
         $this->rule = $rule;
         $this->_resource = $resource;
         $this->_localeDate = $localeDate;
-        $this->_eventTypeFactory = $eventTypeFactory;
+        $this->_eventTypeCollectionFactory = $eventTypeCollectionFactory;
         $this->_systemStore = $systemStore;
         $this->scopeConfig = $scopeConfig;
         $this->_appEmulation = $appEmulation;
@@ -344,7 +343,8 @@ class ConditionsProcessor
 
     protected function _getWishlisttopProductCollection($collection, $storeId)
     {
-        $eventTypes = $this->_eventTypeFactory->create()->getCollection();
+        $eventTypes = $this->_eventTypeCollectionFactory->create();
+        $wishlistEvent = 0;
         foreach ($eventTypes as $eventType) {
             if ($eventType->getEventName() == 'wishlist_add_product') {
                 $wishlistEvent = (int)$eventType->getId();
@@ -372,7 +372,8 @@ class ConditionsProcessor
 
     protected function _getMostViewedProductCollection($collection, $storeId)
     {
-        $eventTypes = $this->_eventTypeFactory->create()->getCollection();
+        $eventTypes = $this->_eventTypeCollectionFactory->create();
+        $productViewEvent = 0;
         foreach ($eventTypes as $eventType) {
             if ($eventType->getEventName() == 'catalog_product_view') {
                 $productViewEvent = (int)$eventType->getId();

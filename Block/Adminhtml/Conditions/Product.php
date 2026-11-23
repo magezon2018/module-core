@@ -20,7 +20,7 @@ use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Registry;
 use Magento\Framework\App\CacheInterface;
@@ -78,9 +78,9 @@ class Product extends Extended
     protected $_visibility;
 
     /**
-     * @var ProductFactory
+     * @var CollectionFactory
      */
-    protected $_productFactory;
+    protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Framework\App\Cache\StateInterface
@@ -93,7 +93,7 @@ class Product extends Extended
      * @param Data $backendHelper
      * @param Status $status
      * @param Visibility $visibility
-     * @param ProductFactory $productFactory
+     * @param CollectionFactory $productCollectionFactory
      * @param Registry $coreRegistry
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\System\Store $systemStore
@@ -107,7 +107,7 @@ class Product extends Extended
         Data $backendHelper,
         Status $status,
         Visibility $visibility,
-        ProductFactory $productFactory,
+        CollectionFactory $productCollectionFactory,
         Registry $coreRegistry,
         ResourceConnection $resource,
         \Magento\Store\Model\System\Store $systemStore,
@@ -119,7 +119,7 @@ class Product extends Extended
         $this->resource = $resource;
         $this->_status = $status;
         $this->_visibility = $visibility;
-        $this->_productFactory = $productFactory;
+        $this->_productCollectionFactory = $productCollectionFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->systemStore = $systemStore;
         $this->cacheState = $cacheState;
@@ -164,7 +164,7 @@ class Product extends Extended
     {
         $productIds = $this->getProductIds();
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-        $collection = $this->_productFactory->create()->getCollection();
+        $collection = $this->_productCollectionFactory->create();
         $collection->addAttributeToSelect(
             ['name', 'url_key', 'visibility', 'status', 'price', 'small_image', 'created_at']
         );

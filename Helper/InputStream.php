@@ -3,6 +3,11 @@ namespace Magezon\Core\Helper;
 
 class InputStream
 {
+    /**
+     * @var resource
+     */
+    protected $stream;
+
     public function setInputStream($content)
     {
         $stream = fopen('php://temp', 'r+');

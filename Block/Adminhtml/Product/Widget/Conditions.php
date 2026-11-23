@@ -15,6 +15,7 @@
 namespace Magezon\Core\Block\Adminhtml\Product\Widget;
 
 use Magento\Backend\Block\Template;
+use Magento\Rule\Block\ConditionsFactory;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
@@ -24,6 +25,11 @@ class Conditions extends Template implements RendererInterface
      * @var \Magento\Rule\Block\Conditions
      */
     protected $conditions;
+
+    /**
+     * @var ConditionsFactory
+     */
+    protected $conditionsFactory;
 
     /**
      * @var \Magento\CatalogWidget\Model\Rule
@@ -58,7 +64,6 @@ class Conditions extends Template implements RendererInterface
     /**
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param \Magento\Rule\Block\Conditions $conditions
-     * @param \Magento\CatalogWidget\Model\Rule $rule
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
@@ -68,7 +73,6 @@ class Conditions extends Template implements RendererInterface
         \Magento\Framework\Data\Form\Element\Factory $elementFactory,
         \Magento\Rule\Block\Conditions $conditions,
         \Magento\Rule\Block\ConditionsFactory $conditionsFactory,
-        \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Framework\Registry $registry,
         array $data = []
     ) {

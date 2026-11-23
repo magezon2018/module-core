@@ -183,14 +183,14 @@ class ErrorException extends \Exception {
 		}
 
 		/**
-		 * Fires when an error is added to a WP_Error object.
+		 * Fires when an error is added to a ErrorException object.
 		 *
 		 * @since 5.6.0
 		 *
 		 * @param string|int $code     Error code.
 		 * @param string     $message  Error message.
 		 * @param mixed      $data     Error data. Might be empty.
-		 * @param WP_Error   $wp_error The WP_Error object.
+		 * @param ErrorException   $wp_error The ErrorException object.
 		 */
 		// do_action( 'wp_error_added', $code, $message, $data, $this );
 	}
@@ -199,7 +199,7 @@ class ErrorException extends \Exception {
 	 * Adds data to an error with the given code.
 	 *
 	 * @since 2.1.0
-	 * @since 5.6.0 Errors can now contain more than one item of error data. {@see WP_Error::$additional_data}.
+	 * @since 5.6.0 Errors can now contain more than one item of error data. {@see ErrorException::$additional_data}.
 	 *
 	 * @param mixed      $data Error data.
 	 * @param string|int $code Error code.
@@ -263,9 +263,9 @@ class ErrorException extends \Exception {
 	 *
 	 * @since 5.6.0
 	 *
-	 * @param WP_Error $error Error object to merge.
+	 * @param ErrorException $error Error object to merge.
 	 */
-	public function merge_from( WP_Error $error ) {
+	public function merge_from( ErrorException $error ) {
 		static::copy_errors( $error, $this );
 	}
 
@@ -274,21 +274,21 @@ class ErrorException extends \Exception {
 	 *
 	 * @since 5.6.0
 	 *
-	 * @param WP_Error $error Error object to export into.
+	 * @param ErrorException $error Error object to export into.
 	 */
-	public function export_to( WP_Error $error ) {
+	public function export_to( ErrorException $error ) {
 		static::copy_errors( $this, $error );
 	}
 
 	/**
-	 * Copies errors from one WP_Error instance to another.
+	 * Copies errors from one ErrorException instance to another.
 	 *
 	 * @since 5.6.0
 	 *
-	 * @param WP_Error $from The WP_Error to copy from.
-	 * @param WP_Error $to   The WP_Error to copy to.
+	 * @param ErrorException $from The ErrorException to copy from.
+	 * @param ErrorException $to   The ErrorException to copy to.
 	 */
-	protected static function copy_errors( WP_Error $from, WP_Error $to ) {
+	protected static function copy_errors( ErrorException $from, ErrorException $to ) {
 		foreach ( $from->get_error_codes() as $code ) {
 			foreach ( $from->get_error_messages( $code ) as $error_message ) {
 				$to->add( $code, $error_message );
